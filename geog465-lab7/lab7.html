@@ -38,9 +38,17 @@
 
             var pop2000Layer = L.geoJSON(myData, {style:popStyle, onEachFeature:popUp2000});
 
-            var pop2010Layer = L.geoJSON(false,
-               {style:function (feature) {return { fillColor: classification(feature.properties.E01003097),
-               weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}}});
+               //new hover for 2010
+                           function popUp2010(feature,layer){
+                                 layer.bindPopup('Census tract: '+ feature.properties.M01003097);
+                                 layer.on('mouseover', function(){layer.openPopup();});
+                           //layer.on('mouseover', newStyle);
+                           //layer.on('mouseout', oldStyle);
+                                 layer.on('mouseout', function(){layer.closePopup();});}
+               //end of new hover 2010
+               var pop2010Layer = L.geoJSON(false,
+                  {style:function (feature) {return { fillColor: classification(feature.properties.E01003097),
+                  weight: 1, opacity: 1, color: 'white', fillOpacity: 0.85}}, onEachFeature:popUp2010});
 
     $.getJSON("https://opendata.arcgis.com/datasets/42ba035b52b14df3b9b16653e8a1e46c_2593.geojson",
             function(data){pop2010Layer.addData(data); });
